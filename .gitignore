@@ -1,0 +1,10 @@
+# Salida de compilación
+out/
+
+# Archivos de IntelliJ que no se comparten
+.idea/workspace.xml
+.idea/shelf/
+.idea/httpRequests/
+
+# Datos de la persistencia en archivo (se generan en tiempo de ejecución)
+*.dat
