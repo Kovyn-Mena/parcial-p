@@ -1,26 +1,26 @@
-import controllers.CursoController;
-import presentation.ConsoleCursoView;
-import repositories.CursoRepository;
-import repositories.FileCursoRepository;
-import repositories.InMemoryCursoRepository;
-import services.CursoService;
+import controllers.CourseController;
+import presentation.ConsoleCourseView;
+import repositories.CourseRepository;
+import repositories.FileCourseRepository;
+import repositories.InMemoryCourseRepository;
+import services.CourseService;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Persistencia en memoria (por defecto)
-        CursoRepository repository = new InMemoryCursoRepository();
+        // In-memory persistence (default)
+        CourseRepository courseRepository = new InMemoryCourseRepository();
 
-        // Persistencia en archivo: comente la línea anterior y descomente esta
-        // CursoRepository repository = new FileCursoRepository("cursos.dat");
+        // File persistence: comment the line above and uncomment this one
+        // CourseRepository courseRepository = new FileCourseRepository("courses.dat");
 
-        CursoService service = new CursoService(repository);
-        CursoController controller = new CursoController(service);
+        CourseService courseService = new CourseService(courseRepository);
+        CourseController courseController = new CourseController(courseService);
 
         try (Scanner scanner = new Scanner(System.in)) {
-            ConsoleCursoView view = new ConsoleCursoView(scanner, controller);
-            view.run();
+            ConsoleCourseView courseView = new ConsoleCourseView(scanner, courseController);
+            courseView.run();
         }
     }
 }

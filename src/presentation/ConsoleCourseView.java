@@ -1,19 +1,19 @@
 package presentation;
 
-import controllers.CursoController;
-import entities.Curso;
-import entities.EstadoCurso;
+import controllers.CourseController;
+import entities.Course;
+import entities.CourseStatus;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class ConsoleCursoView {
+public class ConsoleCourseView {
 
     private final Scanner scanner;
-    private final CursoController controller;
+    private final CourseController controller;
 
-    public ConsoleCursoView(Scanner scanner, CursoController controller) {
+    public ConsoleCourseView(Scanner scanner, CourseController controller) {
         this.scanner = scanner;
         this.controller = controller;
     }
@@ -57,30 +57,30 @@ public class ConsoleCursoView {
 
     private void create() {
         try {
-            Curso curso = controller.create(readEntity());
-            System.out.println("Curso creado con id " + curso.getId());
+            Course course = controller.create(readEntity());
+            System.out.println("Curso creado con id " + course.getId());
         } catch (IllegalArgumentException exception) {
             System.out.println(exception.getMessage());
         }
     }
 
     private void showAll() {
-        List<Curso> cursos = controller.listAll();
-        if (cursos.isEmpty()) {
+        List<Course> courses = controller.listAll();
+        if (courses.isEmpty()) {
             System.out.println("No hay cursos registrados.");
             return;
         }
-        for (Curso curso : cursos) {
-            showEntity(curso);
+        for (Course course : courses) {
+            showEntity(course);
             System.out.println("----------------------------------------");
         }
     }
 
     private void find() {
         readId().ifPresent(id -> {
-            Optional<Curso> curso = controller.findOne(id);
-            if (curso.isPresent()) {
-                showEntity(curso.get());
+            Optional<Course> course = controller.findOne(id);
+            if (course.isPresent()) {
+                showEntity(course.get());
             } else {
                 System.out.println("No se encontró un curso con ese id.");
             }
@@ -103,24 +103,24 @@ public class ConsoleCursoView {
                 controller.delete(id) ? "Curso eliminado." : "No se encontró un curso con ese id."));
     }
 
-    // Lectura de datos por consola
-    private Curso readEntity() {
-        Curso curso = new Curso();
-        curso.setNombre(readValue("Nombre del curso: "));
-        curso.setDocente(readValue("Docente: "));
-        curso.setCreditos(readInt("Créditos (1 a 20): "));
-        curso.setPrecio(readDouble("Precio: "));
-        curso.setEstado(readEstado());
-        return curso;
+    // Console input helpers
+    private Course readEntity() {
+        Course course = new Course();
+        course.setName(readValue("Nombre del curso: "));
+        course.setTeacher(readValue("Docente: "));
+        course.setCredits(readInt("Créditos (1 a 20): "));
+        course.setPrice(readDouble("Precio: "));
+        course.setStatus(readStatus());
+        return course;
     }
 
-    private void showEntity(Curso curso) {
-        System.out.println("Id: " + curso.getId());
-        System.out.println("Nombre: " + curso.getNombre());
-        System.out.println("Docente: " + curso.getDocente());
-        System.out.println("Créditos: " + curso.getCreditos());
-        System.out.println("Precio: " + curso.getPrecio());
-        System.out.println("Estado: " + curso.getEstado());
+    private void showEntity(Course course) {
+        System.out.println("Id: " + course.getId());
+        System.out.println("Nombre: " + course.getName());
+        System.out.println("Docente: " + course.getTeacher());
+        System.out.println("Créditos: " + course.getCredits());
+        System.out.println("Precio: " + course.getPrice());
+        System.out.println("Estado: " + course.getStatus().getLabel());
     }
 
     private Optional<Long> readId() {
@@ -156,18 +156,18 @@ public class ConsoleCursoView {
         }
     }
 
-    private EstadoCurso readEstado() {
-        EstadoCurso[] estados = EstadoCurso.values();
+    private CourseStatus readStatus() {
+        CourseStatus[] statuses = CourseStatus.values();
         while (true) {
             System.out.println("Estado del curso:");
-            for (int i = 0; i < estados.length; i++) {
-                System.out.println((i + 1) + ". " + estados[i]);
+            for (int i = 0; i < statuses.length; i++) {
+                System.out.println((i + 1) + ". " + statuses[i].getLabel());
             }
             System.out.print("Seleccione una opción: ");
             try {
                 int option = Integer.parseInt(scanner.nextLine().trim());
-                if (option >= 1 && option <= estados.length) {
-                    return estados[option - 1];
+                if (option >= 1 && option <= statuses.length) {
+                    return statuses[option - 1];
                 }
                 System.out.println("Opción fuera de rango.");
             } catch (NumberFormatException exception) {

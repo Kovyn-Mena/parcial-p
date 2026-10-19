@@ -3,15 +3,19 @@
 Plantilla lista para la actividad en clase de **Programación 2**: un CRUD completo de consola
 con la arquitectura de 4 capas de la diapositiva del profe.
 
+Los identificadores del código van en **inglés** (clases, atributos, métodos) y los textos de
+consola en **español** (menú y mensajes), siguiendo el estilo de los ejemplos del profe.
+
 | Capa (diapositiva) | Clases en este proyecto |
 |---|---|
-| **Entidades** | `entities/Curso`, `entities/EstadoCurso` (enum) |
-| **Persistencia** | `repositories/CursoRepository` (interfaz), `repositories/InMemoryCursoRepository` (memoria), `repositories/FileCursoRepository` (archivo / serialización) |
-| **Lógica** | `services/CursoService` (validaciones y reglas de negocio) |
-| **Presentación** | `presentation/ConsoleCursoView` (menú por consola) + `Main` (ensambla las capas) |
+| **Entidades** | `entities/Course`, `entities/CourseStatus` (enum) |
+| **Persistencia** | `repositories/CourseRepository` (interfaz), `repositories/InMemoryCourseRepository` (memoria), `repositories/FileCourseRepository` (archivo / serialización) |
+| **Lógica** | `services/CourseService` (validaciones y reglas de negocio) |
+| **Presentación** | `presentation/ConsoleCourseView` (menú por consola) + `Main` (ensambla las capas) |
 
-El dominio de ejemplo es **Curso**, con un campo **enum** (`EstadoCurso`) integrado al CRUD:
-se valida en la capa de lógica y se elige por menú numerado en la consola.
+El dominio de ejemplo es **Course** (curso), con un campo **enum** (`CourseStatus`) integrado al
+CRUD: se valida en la capa de lógica y se elige por menú numerado en la consola (con etiquetas
+en español para mostrar).
 
 ---
 
@@ -68,46 +72,48 @@ Menú de consola:
 - **Read**: listar todos y buscar por id (`Optional`).
 - **Update**: valida id existente + mismas reglas del create.
 - **Delete**: elimina por id.
-- **Enum**: `EstadoCurso` (`ABIERTO`, `EN_CURSO`, `FINALIZADO`, `CANCELADO`) se elige por
-  número en consola y se valida en la capa de lógica.
+- **Enum**: `CourseStatus` (`OPEN`, `IN_PROGRESS`, `FINISHED`, `CANCELLED`) se elige por
+  número en consola (se muestra la etiqueta en español) y se valida en la capa de lógica.
 
 ## Persistencia: memoria o archivo
 
-Por defecto el `Main` usa **memoria** (`InMemoryCursoRepository`).
+Por defecto el `Main` usa **memoria** (`InMemoryCourseRepository`).
 Para guardar en archivo (serialización), en `Main.java` comente/descomente:
 
 ```java
-CursoRepository repository = new InMemoryCursoRepository();
-// CursoRepository repository = new FileCursoRepository("cursos.dat");
+CourseRepository courseRepository = new InMemoryCourseRepository();
+// CourseRepository courseRepository = new FileCourseRepository("courses.dat");
 ```
 
-El archivo `cursos.dat` se crea solo en la carpeta del proyecto. `*.dat` está en `.gitignore`.
+El archivo `courses.dat` se crea solo en la carpeta del proyecto. `*.dat` está en `.gitignore`.
 
 ---
 
 ## Checklist de adaptación en clase (dominio nuevo en ~5 minutos)
 
-1. **Renombrar la entidad**: abrir `Curso.java` → `Shift+F6` (Rename) → nuevo nombre
+1. **Renombrar la entidad**: abrir `Course.java` → `Shift+F6` (Rename) → nuevo nombre
    (marcar *Search in comments and strings* ayuda, pero revise los textos a mano).
 2. **Reemplazo global de textos**: `Ctrl+Shift+R` (Replace in Path) sobre `src/`:
-   - `Curso` → `NuevoNombre` (clases, tipos, mensajes)
-   - `curso` → `nuevoNombre` (variables)
-   - `CURSOS` → `NUEVOS` (títulos del menú)
+   - `Course` → `NuevoNombre` (clases, tipos)
+   - `course` → `nuevoNombre` (variables)
+   - `courses` → `nuevos` (listas)
+   - Luego ajustar a mano los textos en español (títulos del menú y mensajes).
 3. **Campos**: en la entidad, ajustar atributos; generar getters/setters/constructor con
    `Alt+Insert`; ajustar `toString()`.
-4. **Validaciones**: en `CursoService.validateFields()` poner las reglas del dominio y en
-   `validateNombreRepetido()` las reglas de negocio (duplicados, límites, etc.).
+4. **Validaciones**: en `CourseService.validateFields()` poner las reglas del dominio y en
+   `validateDuplicateName()` las reglas de negocio (duplicados, límites, etc.).
 5. **Vista**: solo cambian `readEntity()` (agregar/quitar `readValue/readInt/readDouble`) y
    `showEntity()` (imprimir los campos). El menú y el resto de la vista no se tocan.
 6. **Correr y probar**: registrar, listar, buscar, actualizar, eliminar.
 
 ### Agregar otro campo enum
 
-1. Crear el enum en `entities/` con el mismo patrón de `EstadoCurso.java`.
+1. Crear el enum en `entities/` con el mismo patrón de `CourseStatus.java`
+   (constantes en inglés + etiqueta en español).
 2. Agregar el campo + getter/setter en la entidad.
-3. Copiar el método `readEstado()` de la vista y adaptarlo al nuevo enum.
-4. Llamarlo en `readEntity()` y mostrarlo en `showEntity()`.
-5. Validar en `CursoService` que no venga nulo.
+3. Copiar el método `readStatus()` de la vista y adaptarlo al nuevo enum.
+4. Llamarlo en `readEntity()` y mostrarlo en `showEntity()` (usar `getLabel()`).
+5. Validar en `CourseService` que no venga nulo.
 
 ---
 
@@ -135,7 +141,7 @@ git clone https://github.com/TU_USUARIO/TU_REPO.git
 
 ### Notas
 
-- Los mensajes de consola están en español, siguiendo el estilo del código del profe
+- Identificadores en inglés y mensajes de consola en español, igual que los ejemplos del profe
   (`create`, `listAll`, `findOne`, `generateId`).
 - El proyecto no usa Maven/Gradle ni librerías externas: es un módulo Java simple,
   igual que los proyectos vistos en clase.
