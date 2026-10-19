@@ -120,7 +120,7 @@ El archivo `courses.dat` se crea solo en la carpeta del proyecto. `*.dat` está 
 ## Subir a GitHub (desde este PC)
 
 ```bash
-git remote add origin https://github.com/TU_USUARIO/TU_REPO.git
+git remote add origin https://github.com/Kovyn-Mena/parcial-p.git
 git branch -M main
 git push -u origin main
 ```
@@ -128,7 +128,7 @@ git push -u origin main
 ## Clonar en la PC de la universidad (Windows)
 
 ```bash
-git clone https://github.com/TU_USUARIO/TU_REPO.git
+git clone https://github.com/Kovyn-Mena/parcial-p.git
 ```
 
 1. Abrir la carpeta clonada en IntelliJ (`File → Open`).
